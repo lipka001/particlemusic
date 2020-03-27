@@ -22,6 +22,7 @@ class ParticleCanvas {
         this.count = options.particleCount;
 
         this.particleArray = new Array();
+        this.lineLengnt = 0;
 
     }
 
@@ -51,8 +52,7 @@ class ParticleCanvas {
     createLines() {
         for (let i = 0; i < this.count; i++){
             for (let j = 0; j < this.count; j++){
-                let lineLengnt = 100;
-                if ((Math.sqrt(Math.pow((this.particleArray[j].x- this.particleArray[i].x), 2)+Math.pow((this.particleArray[j].y- this.particleArray[i].y), 2))) < lineLengnt) {
+                if ((Math.sqrt(Math.pow((this.particleArray[j].x- this.particleArray[i].x), 2)+Math.pow((this.particleArray[j].y- this.particleArray[i].y), 2))) < this.lineLengnt) {
                 this.context.strokeStyle = "rgba(255, 255, 255, 0.3)";
                 this.context.beginPath();
                 this.context.moveTo(this.particleArray[i].x, this.particleArray[i].y);
@@ -127,7 +127,7 @@ const particleCanvas = new ParticleCanvas({
     width: window.innerWidth,
     height: window.innerHeight,
     color: "rgba(100, 100, 255, 0.3)",
-    particleCount: 250
+    particleCount: 200
 });
 
 
@@ -151,22 +151,22 @@ class Music {
             }
             if(this.audio.paused){
                 this.audio.play();
-                this.loop(() => this.loop());
+                window.requestAnimationFrame(() => this.loop());
             } else {
                 this.audio.pause();
             }
         };
     }
 
-    loop(callback) {
+    loop() {
         if (!this.audio.paused) {
-            () => callback();
+            window.requestAnimationFrame(() => this.loop());
         }
         array = new Uint8Array(this.analyser.frequencyBinCount);
         this.analyser.getByteFrequencyData(array);
 
         for (let i = 0; i < particleCanvas.count; i++) {
-            particleCanvas.particleArray[i].speedX = array[40];
+            particleCanvas.lineLengnt = array[2]*0.5;
         }
     }
 }
