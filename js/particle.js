@@ -130,16 +130,14 @@ const particleCanvas = new ParticleCanvas({
     particleCount: 250
 });
 
-const audioContext = new AudioContext();
 
 class Music {
     constructor(options) {
-        this.preparations();
         this.play();
     }
 
     preparations() {
-        this.context = audioContext;
+        this.context = new AudioContext();
         this.analyser = this.context.createAnalyser();
         this.audio = document.querySelector('#audio');
         this.src = this.context.createMediaElementSource(this.audio);
