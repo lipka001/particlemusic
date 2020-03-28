@@ -5,11 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <title>Particle</title>
 </head>
 <body>
-    <canvas id="particleCanvas"></canvas> 
-    <audio src="music.mp3" id="audio"></audio>
+    <div class="wrap">
+        <canvas id="particleCanvas"></canvas> 
+        <div class="panel">
+            <h1>Drag&Drop or browse your music</h1>
+            <div id="dropzone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" ondragleave="dragOverLeave(event);">
+                <i class="fa fa-download"></i>
+                <input id="upload" type="file" onchange="readFile(this)">
+                <label for="upload" class="upload-button">Browse music file</label>
+            </div>
+            <button id="play"><i class="fa fa-play"></i></button>
+        </div>
+    </div>
     <script src="js/particle.js"></script>
+    <script src="js/load.js"></script>
 </body>
 </html>

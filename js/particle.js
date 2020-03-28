@@ -23,6 +23,7 @@ class ParticleCanvas {
 
         this.particleArray = new Array();
         this.lineLengnt = 0;
+        this.lineColor = "rgba(255, 255, 255, 0.5)";
 
     }
 
@@ -53,7 +54,7 @@ class ParticleCanvas {
         for (let i = 0; i < this.count; i++){
             for (let j = 0; j < this.count; j++){
                 if ((Math.sqrt(Math.pow((this.particleArray[j].x- this.particleArray[i].x), 2)+Math.pow((this.particleArray[j].y- this.particleArray[i].y), 2))) < this.lineLengnt) {
-                this.context.strokeStyle = "rgba(255, 255, 255, 0.3)";
+                this.context.strokeStyle = this.lineColor;
                 this.context.beginPath();
                 this.context.moveTo(this.particleArray[i].x, this.particleArray[i].y);
                 this.context.lineTo(this.particleArray[j].x, this.particleArray[j].y);
@@ -122,14 +123,6 @@ class Particle {
     }
 }
 
-const particleCanvas = new ParticleCanvas({
-    selector: "#particleCanvas",
-    width: window.innerWidth,
-    height: window.innerHeight,
-    color: "rgba(100, 100, 255, 0.3)",
-    particleCount: 200
-});
-
 
 class Music {
     constructor(options) {
@@ -145,17 +138,19 @@ class Music {
         this.analyser.connect(this.context.destination);
     }
     play() {
-        window.onclick = () => {
+        document.querySelector('#play').addEventListener('click', () => {
             if(!this.context){
                 this.preparations();
             }
             if(this.audio.paused){
                 this.audio.play();
                 window.requestAnimationFrame(() => this.loop());
+                document.querySelector('#play').innerHTML = `<i class="fa fa-pause"></i>`;
             } else {
                 this.audio.pause();
+                document.querySelector('#play').innerHTML = `<i class="fa fa-play"></i>`
             }
-        };
+        });
     }
 
     loop() {
@@ -166,9 +161,11 @@ class Music {
         this.analyser.getByteFrequencyData(array);
 
         for (let i = 0; i < particleCanvas.count; i++) {
-            particleCanvas.lineLengnt = array[2]*0.5;
+            particleCanvas.lineLengnt = array[100]*0.5;
+            particleCanvas.particleArray[i].color = `rgba(${array[100]}, ${array[100]}, ${array[100]}, 0.8)`;
+            particleCanvas.lineColor = `rgba(${array[100]}, ${array[100]}, ${array[100]}, 0.8)`;
         }
     }
 }
-
-const music = new Music({});
+let particleCanvas;
+let music;
